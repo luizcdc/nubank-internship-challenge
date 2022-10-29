@@ -27,7 +27,7 @@ class Account:
     A client's account that stores their available limit, their status (active/
     inactive) and its history of successful transactions."""
 
-    validations: tuple[Violation] = (NotInactive, FirstAboveThreshold)
+    _VALIDATIONS: tuple[Violation] = (NotInactive, FirstAboveThreshold)
 
     def __init__(self, active: bool = True, available_limit: int = 0) -> None:
         self.active = active
@@ -43,7 +43,7 @@ class Account:
 
         infringed_violations = list(filter(lambda v: not v.validate(account=self,
                                                                     transaction=transaction),
-                                           Account.validations))
+                                           Account._VALIDATIONS))
 
         if not infringed_violations:
             self.history.append(transaction)
