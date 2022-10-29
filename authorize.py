@@ -40,10 +40,10 @@ class Account:
         If the transaction is valid, authorizes it, adds it to the history.
 
         Returns the result with the account and violations (if any)."""
-        infringed_violations = []
-        for violation in self.validations:
-            if not violation.validate(self, transaction):
-                infringed_violations.append(violation)
+
+        infringed_violations = list(filter(lambda v: not v.validate(account=self,
+                                                                    transaction=transaction),
+                                           Account.validations))
 
         if not infringed_violations:
             self.history.append(transaction)
