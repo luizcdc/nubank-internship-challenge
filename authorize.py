@@ -27,7 +27,7 @@ class Transaction:
 
 
 class Account:
-    validations: tuple[Violation] = (NotInactive)
+    validations: tuple[Violation] = (NotInactive,)
 
     def __init__(self, active: bool = True, available_limit: int = 0) -> None:
         self.active = active
