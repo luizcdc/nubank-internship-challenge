@@ -29,7 +29,7 @@ Desafio de código para o exercício de *pair programming* do processo seletivo 
   - [ ] Adiciona transação ao histórico em caso de sucesso
   - [x] Verificação de `account-not-active`
   - [x] Verificação de `first-transaction-above-threshold`
-  - [ ] Verificação de `insufficient-limit`
+  - [x] Verificação de `insufficient-limit`
   - [ ] Verificação de `highfrequency-small-interval`
   - [ ] Verificação de `doubled-transaction`
 
