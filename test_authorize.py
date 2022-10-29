@@ -25,13 +25,13 @@ class TestAuthorize(unittest.TestCase):
 
         assert account_true.active is True
         self.assertTrue(NotInactive.validate(self.account_1,
-                                             Transaction('Burguer King',
+                                             Transaction('merchant_1',
                                                          SMALL_VALUE,
                                                          now)))
 
         assert account_false.active is False
         self.assertFalse(NotInactive.validate(self.account_2,
-                                              Transaction('Burguer King',
+                                              Transaction('merchant_1',
                                                           SMALL_VALUE,
                                                           now)))
 
@@ -48,23 +48,23 @@ class TestAuthorize(unittest.TestCase):
         assert OVER_VALUE > FirstAboveThreshold.THRESHOLD * LIMIT
 
         self.assertTrue(FirstAboveThreshold.validate(account,
-                                                     Transaction('Burguer King',
+                                                     Transaction('merchant_1',
                                                                  UNDER_VALUE,
                                                                  now)))
 
         self.assertTrue(FirstAboveThreshold.validate(account,
-                                                     Transaction('Burguer King',
+                                                     Transaction('merchant_1',
                                                                  THRESHOLD_VALUE,
                                                                  now)))
         self.assertFalse(FirstAboveThreshold.validate(account,
-                                                      Transaction('Burguer King',
+                                                      Transaction('merchant_1',
                                                                   OVER_VALUE,
                                                                   now)))
 
     def test_authorize_active_account(self):
         now = self.now
         SMALL_VALUE = 1
-        transaction = Transaction(merchant='Burguer King',
+        transaction = Transaction(merchant='merchant_1',
                                   amount=SMALL_VALUE,
                                   time=now)
 
