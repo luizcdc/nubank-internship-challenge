@@ -1,3 +1,6 @@
+from dataclasses import dataclass
+
+
 class Violation(Exception):
     def __init__(self, violation_name: str = ""):
         self._violation_name = violation_name
@@ -8,6 +11,7 @@ class Violation(Exception):
     @classmethod
     def validate(cls, account, transaction) -> bool | None:
         """Validates that the violation was not infringed."""
+
         raise NotImplementedError("Cannot validate generic violation")
 
 
@@ -21,11 +25,11 @@ class NotInactive(Violation):
         return account.active
 
 
+@dataclass
 class Transaction:
-    def __init__(self, merchant: str, amount: int, time: int):
-        self.merchant = merchant
-        self.amount = amount
-        self.time = time
+    merchant: str
+    amount: int
+    time: int
 
 
 class Account:
