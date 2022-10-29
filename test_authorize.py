@@ -3,7 +3,8 @@ import unittest
 import sys
 try:
     sys.path.append('..//')
-    from authorize import Account, Transaction, NotInactive, FirstAboveThreshold
+    from authorize import Account, Transaction
+    from violations import NotInactive, FirstAboveThreshold
 except ModuleNotFoundError:
     pass
 
