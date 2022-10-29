@@ -7,6 +7,7 @@ class Violation(Exception):
 
     @classmethod
     def validate(cls, account, transaction) -> bool | None:
+        """Validates that the violation was not infringed."""
         raise NotImplementedError("Cannot validate generic violation")
 
 
@@ -16,6 +17,7 @@ class NotInactive(Violation):
 
     @classmethod
     def validate(cls, account, transaction) -> bool:
+        """Validates that the violation was not infringed."""
         return account.active
 
 
@@ -35,7 +37,7 @@ class Account:
         self.history: list[Transaction] = []
 
     def authorize(self, transaction: Transaction) -> dict[str, str]:
-        """If authorized, registers a transaction
+        """If authorized, registers a transaction.
 
         If the transaction is valid, authorizes it, adds it to the history.
 
