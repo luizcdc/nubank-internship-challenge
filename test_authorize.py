@@ -4,7 +4,7 @@ import sys
 try:
     sys.path.append('..//')
     from authorize import Account, Transaction
-    from violations import NotActive, FirstAboveThreshold
+    from violations import (NotActive, FirstAboveThreshold, InsufficientLimit)
 except ModuleNotFoundError:
     pass
 
@@ -18,7 +18,7 @@ class TestAuthorize(unittest.TestCase):
         self.account_2 = Account(False, 100)
         self.now = datetime.now()
 
-    def test_not_inactive(self):
+    def test_not_active(self):
         now = self.now
         SMALL_VALUE = 1
         account_true = self.account_1
@@ -35,6 +35,31 @@ class TestAuthorize(unittest.TestCase):
                                             Transaction('merchant_1',
                                                         SMALL_VALUE,
                                                         now)))
+
+    def test_insufficient_limit(self):
+        now = self.now
+
+        LOWER_VALUE = self.account_1.available_limit - 1
+        EQUAL_VALUE = self.account_1.available_limit
+        LARGER_VALUE = self.account_1.available_limit + 1
+
+        account_sufficient = Account(self.account_1.active,
+                                     self.account_1.available_limit)
+
+        self.assertTrue(InsufficientLimit.validate(account_sufficient,
+                                                   Transaction('merchant_1',
+                                                               LOWER_VALUE,
+                                                               now)))
+
+        self.assertTrue(InsufficientLimit.validate(account_sufficient,
+                                                   Transaction('merchant_1',
+                                                               EQUAL_VALUE,
+                                                               now)))
+
+        self.assertFalse(InsufficientLimit.validate(account_sufficient,
+                                                    Transaction('merchant_1',
+                                                                LARGER_VALUE,
+                                                                now)))
 
     def test_first_transaction_above_threshold(self):
         now = self.now
