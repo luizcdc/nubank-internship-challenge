@@ -43,7 +43,9 @@ class TestAuthorize(unittest.TestCase):
                                   time=now)
 
         account_active = self.account_1
-        account_active_after = Account(True, 90)
+        account_active_after = Account(account_active.active,
+                                       (account_active.available_limit -
+                                        SMALL_VALUE))
         account_active_after.history.append(transaction)
 
         account_inactive = self.account_2
