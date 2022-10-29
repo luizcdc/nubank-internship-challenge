@@ -37,13 +37,25 @@ class TestAuthorize(unittest.TestCase):
 
     def test_authorize_active_account(self):
         now = self.now
-        transaction1 = Transaction('Burguer King', 10, now)
-        account1_after = Account(True, 90)
-        account1_after.history.append(transaction1)
-        transaction2 = Transaction('Paris 6', 100, now)
-        self.assertEqual(self.account_1.authorize(transaction1),
-                         {'account': account1_after,
+        SMALL_VALUE = 1
+        transaction = Transaction(merchant='Burguer King',
+                                  amount=SMALL_VALUE,
+                                  time=now)
+
+        account_active = self.account_1
+        account_active_after = Account(True, 90)
+        account_active_after.history.append(transaction)
+
+        account_inactive = self.account_2
+        account_inactive_after = Account(active=account_inactive.active,
+                                         available_limit=account_inactive.available_limit)
+
+        assert account_active.active is True
+        self.assertEqual(account_active.authorize(transaction),
+                         {'account': account_active_after,
                           'violations': []})
-        self.assertEqual(self.account_2.authorize(transaction2),
-                         {'account': Account(False, 100),
+
+        assert account_inactive.active is False
+        self.assertEqual(account_inactive.authorize(transaction),
+                         {'account': account_inactive_after,
                           'violations': [NotInactive]})
