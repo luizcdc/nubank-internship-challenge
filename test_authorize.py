@@ -87,3 +87,37 @@ class TestAuthorize(unittest.TestCase):
         self.assertEqual(account_inactive.authorize(transaction),
                          {'account': account_inactive_after,
                           'violations': [NotInactive]})
+
+    def test_authorize_subtracts_limit(self):
+        now = self.now
+        SMALL_VALUE = 1
+        MEDIUM_VALUE = self.account_1.available_limit // 2
+
+        account_small = Account(self.account_1.active,
+                                self.account_1.available_limit)
+        limit_after_small = account_small.available_limit - SMALL_VALUE
+        transaction_small = Transaction(merchant='merchant_1',
+                                        amount=SMALL_VALUE,
+                                        time=now)
+
+        assert account_small.active is True
+        assert SMALL_VALUE <= account_small.available_limit
+        account_small.authorize(transaction_small)
+        temp_newlimit_small = account_small.available_limit
+        self.assertEqual(temp_newlimit_small, limit_after_small)
+
+        account_medium = Account(self.account_1.active,
+                                 self.account_1.available_limit)
+        limit_after_medium = account_medium.available_limit - MEDIUM_VALUE
+        transaction_medium = Transaction(merchant='merchant_1',
+                                         amount=MEDIUM_VALUE,
+                                         time=now)
+
+        assert account_medium.active is True
+        assert MEDIUM_VALUE <= account_medium.available_limit
+        account_medium.authorize(transaction_medium)
+        temp_newlimit_medium = account_medium.available_limit
+        self.assertEqual(temp_newlimit_medium, limit_after_medium)
+
+    def test_authorize_adds_transaction(self):
+        raise NotImplementedError
