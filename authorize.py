@@ -1,7 +1,14 @@
+"""Um sistema que autoriza ou rejeita transações seguindo regras predefinidas
+
+    Desafio de código para o exercício de pair programming do processo seletivo para
+    estágio 2023 do Nubank."""
+
 from dataclasses import dataclass
 
 
 class Violation(Exception):
+    """An infringement of the authorizer's business logic."""
+
     def __init__(self, violation_name: str = ""):
         self._violation_name = violation_name
 
@@ -16,6 +23,8 @@ class Violation(Exception):
 
 
 class NotInactive(Violation):
+    """Violation that signals that the account was not active."""
+
     def __init__(self):
         super().__init__(violation_name="account-not-active")
 
@@ -27,12 +36,18 @@ class NotInactive(Violation):
 
 @dataclass
 class Transaction:
+    """A credit-card transaction."""
     merchant: str
     amount: int
     time: int
 
 
 class Account:
+    """A client's account.
+
+    A client's account that stores their available limit, their status (active/
+    inactive) and its history of successful transactions."""
+
     validations: tuple[Violation] = (NotInactive,)
 
     def __init__(self, active: bool = True, available_limit: int = 0) -> None:
