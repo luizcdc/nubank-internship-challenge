@@ -120,4 +120,19 @@ class TestAuthorize(unittest.TestCase):
         self.assertEqual(temp_newlimit_medium, limit_after_medium)
 
     def test_authorize_adds_transaction(self):
-        raise NotImplementedError
+        now = self.now
+        SMALL_VALUE = 1
+        transaction = Transaction(merchant='merchant_1',
+                                  amount=SMALL_VALUE,
+                                  time=now)
+
+        account_active = self.account_1
+        account_active_after = Account(account_active.active,
+                                       (account_active.available_limit -
+                                        SMALL_VALUE))
+        account_active_after.history.append(transaction)
+
+        assert account_active.active is True
+        self.assertTrue(transaction in (account_active
+                                        .authorize(transaction)['account']
+                                        .history))
