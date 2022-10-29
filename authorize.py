@@ -35,6 +35,18 @@ class NotInactive(Violation):
         return account.active
 
 
+class FirstAboveThreshold(Violation):
+
+    def __init__(self):
+        super().__init__(violation_name="first-transaction-above-threshold")
+
+    @classmethod
+    def validate(cls, account, transaction) -> bool:
+        """Validates that the violation was not infringed."""
+
+        raise NotImplementedError
+
+
 @dataclass
 class Transaction:
     """A credit-card transaction."""

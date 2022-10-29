@@ -3,7 +3,7 @@ import unittest
 import sys
 try:
     sys.path.append('..//')
-    from authorize import Account, Transaction, NotInactive
+    from authorize import Account, Transaction, NotInactive, FirstAboveThreshold
 except ModuleNotFoundError:
     pass
 
@@ -34,6 +34,32 @@ class TestAuthorize(unittest.TestCase):
                                               Transaction('Burguer King',
                                                           SMALL_VALUE,
                                                           now)))
+
+    def test_first_transaction_above_threshold(self):
+        now = self.now
+        LIMIT = self.account_1.available_limit
+        account = self.account_1
+
+        UNDER_VALUE = 50
+        THRESHOLD_VALUE = 90
+        OVER_VALUE = 99
+        assert UNDER_VALUE < 0.9 * LIMIT
+        assert THRESHOLD_VALUE == 0.9 * LIMIT
+        assert OVER_VALUE > 0.9 * LIMIT
+
+        self.assertTrue(FirstAboveThreshold.validate(account,
+                                                     Transaction('Burguer King',
+                                                                 UNDER_VALUE,
+                                                                 now)))
+
+        self.assertTrue(FirstAboveThreshold.validate(account,
+                                                     Transaction('Burguer King',
+                                                                 THRESHOLD_VALUE,
+                                                                 now)))
+        self.assertFalse(FirstAboveThreshold.validate(account,
+                                                      Transaction('Burguer King',
+                                                                  OVER_VALUE,
+                                                                  now)))
 
     def test_authorize_active_account(self):
         now = self.now
