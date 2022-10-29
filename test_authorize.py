@@ -4,7 +4,7 @@ import sys
 try:
     sys.path.append('..//')
     from authorize import Account, Transaction
-    from violations import NotInactive, FirstAboveThreshold
+    from violations import NotActive, FirstAboveThreshold
 except ModuleNotFoundError:
     pass
 
@@ -25,16 +25,16 @@ class TestAuthorize(unittest.TestCase):
         account_false = self.account_2
 
         assert account_true.active is True
-        self.assertTrue(NotInactive.validate(self.account_1,
-                                             Transaction('merchant_1',
-                                                         SMALL_VALUE,
-                                                         now)))
+        self.assertTrue(NotActive.validate(self.account_1,
+                                           Transaction('merchant_1',
+                                                       SMALL_VALUE,
+                                                       now)))
 
         assert account_false.active is False
-        self.assertFalse(NotInactive.validate(self.account_2,
-                                              Transaction('merchant_1',
-                                                          SMALL_VALUE,
-                                                          now)))
+        self.assertFalse(NotActive.validate(self.account_2,
+                                            Transaction('merchant_1',
+                                                        SMALL_VALUE,
+                                                        now)))
 
     def test_first_transaction_above_threshold(self):
         now = self.now
@@ -87,7 +87,7 @@ class TestAuthorize(unittest.TestCase):
         assert account_inactive.active is False
         self.assertEqual(account_inactive.authorize(transaction),
                          {'account': account_inactive_after,
-                          'violations': [NotInactive]})
+                          'violations': [NotActive]})
 
     def test_authorize_subtracts_limit(self):
         now = self.now

@@ -17,7 +17,7 @@ class Violation(Exception):
         raise NotImplementedError("Cannot validate generic violation")
 
 
-class NotInactive(Violation):
+class NotActive(Violation):
     """Violation that signals that the account was not active."""
 
     def __init__(self):

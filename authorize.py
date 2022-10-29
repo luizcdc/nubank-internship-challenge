@@ -7,7 +7,7 @@ from dataclasses import dataclass
 import sys
 try:
     sys.path.append('..//')
-    from violations import NotInactive, FirstAboveThreshold, Violation
+    from violations import NotActive, FirstAboveThreshold, Violation
 except ModuleNotFoundError:
     pass
 
@@ -27,7 +27,7 @@ class Account:
     A client's account that stores their available limit, their status (active/
     inactive) and its history of successful transactions."""
 
-    _VALIDATIONS: tuple[Violation] = (NotInactive, FirstAboveThreshold)
+    _VALIDATIONS: tuple[Violation] = (NotActive, FirstAboveThreshold)
 
     def __init__(self, active: bool = True, available_limit: int = 0) -> None:
         self.active = active
