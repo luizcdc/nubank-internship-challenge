@@ -40,7 +40,7 @@ class Transaction:
     """A credit-card transaction."""
 
     merchant: str
-    amount: int
+    amount: int  # cents
     time: int
 
 

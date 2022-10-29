@@ -19,15 +19,20 @@ class TestAuthorize(unittest.TestCase):
 
     def test_not_inactive(self):
         now = self.now
+        SMALL_VALUE = 1
+        account_true = self.account_1
+        account_false = self.account_2
 
+        assert account_true.active is True
         self.assertTrue(NotInactive.validate(self.account_1,
                                              Transaction('Burguer King',
-                                                         10,
+                                                         SMALL_VALUE,
                                                          now)))
 
+        assert account_false.active is False
         self.assertFalse(NotInactive.validate(self.account_2,
-                                              Transaction('Paris 6',
-                                                          100,
+                                              Transaction('Burguer King',
+                                                          SMALL_VALUE,
                                                           now)))
 
     def test_authorize_active_account(self):
