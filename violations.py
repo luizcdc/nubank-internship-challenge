@@ -1,4 +1,10 @@
 """Violation classes for authorize.py"""
+import sys
+try:
+    sys.path.append('..//')
+    from authorize import Account, Transaction
+except ModuleNotFoundError:
+    pass
 
 
 class Violation(Exception):
@@ -43,3 +49,14 @@ class FirstAboveThreshold(Violation):
         return (True if account.history else
                 (transaction.amount <=
                  account.available_limit * FirstAboveThreshold.THRESHOLD))
+
+
+class InsufficientLimit(Violation):
+    def __init__(self):
+        super().__init__(violation_name="first-transaction-above-threshold")
+
+    @classmethod
+    def validate(cls, account: Account, transaction: Transaction) -> bool:
+        """Validates that the violation was not infringed."""
+
+        return (transaction.amount <= account.available_limit)
