@@ -27,7 +27,7 @@ class Transaction:
 
 
 class Account:
-    validations: list[Violation] = [NotInactive]
+    validations: tuple[Violation] = (NotInactive)
 
     def __init__(self, active: bool = True, available_limit: int = 0) -> None:
         self.active = active
@@ -48,6 +48,7 @@ class Account:
         if not infringed_violations:
             self.history.append(transaction)
             self.available_limit -= transaction.amount
+
         return {'account': self,
                 'violations': infringed_violations}
 
