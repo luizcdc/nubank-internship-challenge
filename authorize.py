@@ -27,7 +27,7 @@ class Account:
     A client's account that stores their available limit, their status (active/
     inactive) and its history of successful transactions."""
 
-    validations: tuple[Violation] = (NotInactive,)
+    validations: tuple[Violation] = (NotInactive, FirstAboveThreshold)
 
     def __init__(self, active: bool = True, available_limit: int = 0) -> None:
         self.active = active
