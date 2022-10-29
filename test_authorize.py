@@ -43,9 +43,9 @@ class TestAuthorize(unittest.TestCase):
         UNDER_VALUE = 50
         THRESHOLD_VALUE = 90
         OVER_VALUE = 99
-        assert UNDER_VALUE < 0.9 * LIMIT
-        assert THRESHOLD_VALUE == 0.9 * LIMIT
-        assert OVER_VALUE > 0.9 * LIMIT
+        assert UNDER_VALUE < FirstAboveThreshold.THRESHOLD * LIMIT
+        assert THRESHOLD_VALUE == FirstAboveThreshold.THRESHOLD * LIMIT
+        assert OVER_VALUE > FirstAboveThreshold.THRESHOLD * LIMIT
 
         self.assertTrue(FirstAboveThreshold.validate(account,
                                                      Transaction('Burguer King',
