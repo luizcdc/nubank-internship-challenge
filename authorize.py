@@ -7,7 +7,7 @@ class Violation(Exception):
 
     @classmethod
     def validate(cls, account, transaction) -> bool | None:
-        raise Exception("NOT IMPLEMENTED")
+        raise NotImplementedError("Cannot validate generic violation")
 
 
 class NotInactive(Violation):
