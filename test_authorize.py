@@ -15,9 +15,10 @@ class TestAuthorize(unittest.TestCase):
     def setUp(self):
         self.account_1 = Account(True, 100)
         self.account_2 = Account(False, 100)
+        self.now = datetime.now()
 
     def test_not_inactive(self):
-        now = datetime.now()
+        now = self.now
 
         self.assertTrue(NotInactive.validate(self.account_1,
                                              Transaction('Burguer King',
@@ -30,10 +31,9 @@ class TestAuthorize(unittest.TestCase):
                                                           now)))
 
     def test_authorize_active_account(self):
-        now = datetime.now()
+        now = self.now
         transaction1 = Transaction('Burguer King', 10, now)
-        account1_after = Account(
-            True, 90)
+        account1_after = Account(True, 90)
         account1_after.history.append(transaction1)
         transaction2 = Transaction('Paris 6', 100, now)
         self.assertEqual(self.account_1.authorize(transaction1),
