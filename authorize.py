@@ -1,13 +1,13 @@
-"""Um sistema que autoriza ou rejeita transações seguindo regras predefinidas
+"""A system that authorizes transactions following predefined rules.
 
-    Desafio de código para o exercício de pair programming do processo seletivo para
-    estágio 2023 do Nubank."""
+    Coding challenge for the pair programming exercise for Nubank's 2023 intern-
+    ship selection process."""
 
 from dataclasses import dataclass
 
 
 class Violation(Exception):
-    """An infringement of the authorizer's business logic."""
+    """An infringement of the system's business logic."""
 
     def __init__(self, violation_name: str = ""):
         self._violation_name = violation_name
@@ -31,12 +31,14 @@ class NotInactive(Violation):
     @classmethod
     def validate(cls, account, transaction) -> bool:
         """Validates that the violation was not infringed."""
+
         return account.active
 
 
 @dataclass
 class Transaction:
     """A credit-card transaction."""
+
     merchant: str
     amount: int
     time: int
