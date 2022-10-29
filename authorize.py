@@ -36,6 +36,7 @@ class NotInactive(Violation):
 
 
 class FirstAboveThreshold(Violation):
+    THRESHOLD = 0.9
 
     def __init__(self):
         super().__init__(violation_name="first-transaction-above-threshold")
@@ -44,7 +45,9 @@ class FirstAboveThreshold(Violation):
     def validate(cls, account, transaction) -> bool:
         """Validates that the violation was not infringed."""
 
-        raise NotImplementedError
+        return (True if account.history else
+                (transaction.amount <=
+                 account.available_limit * FirstAboveThreshold.THRESHOLD))
 
 
 @dataclass
