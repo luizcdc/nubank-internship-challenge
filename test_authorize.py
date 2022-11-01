@@ -4,7 +4,11 @@ import sys
 try:
     sys.path.append('..//')
     from authorize import Account, Transaction
-    from violations import (NotActive, FirstAboveThreshold, InsufficientLimit)
+    from violations import (NotActive,
+                            FirstAboveThreshold,
+                            InsufficientLimit,
+                            HighFreqSmallInterval)
+
 except ModuleNotFoundError:
     pass
 
@@ -16,7 +20,7 @@ class TestAuthorize(unittest.TestCase):
     def setUp(self):
         self.account_1 = Account(True, 100)
         self.account_2 = Account(False, 100)
-        self.now = datetime.now()
+        self.now = datetime.now().timestamp()
 
     def test_not_active(self):
         now = self.now
@@ -60,6 +64,31 @@ class TestAuthorize(unittest.TestCase):
                                                     Transaction('merchant_1',
                                                                 LARGER_VALUE,
                                                                 now)))
+
+        def test_high_freq_small_interval(self):
+            NOW = self.now
+            TWO_MINUTES_AGO = NOW - 120
+            ONE_MINUTE_AGO = NOW - 60
+
+            account = Account(self.account_1.active,
+                              self.account_1.available_limit)
+
+            account.history.extend([Transaction('merchant_1',
+                                                100,
+                                                TWO_MINUTES_AGO),
+                                    Transaction('merchant_2',
+                                                200,
+                                                ONE_MINUTE_AGO)])
+
+            self.assertFalse(HighFreqSmallInterval.validate(account_sufficient,
+                                                            Transaction('merchant_3',
+                                                                        300,
+                                                                        NOW)))
+
+            self.assertTrue(HighFreqSmallInterval.validate(account_sufficient,
+                                                           Transaction('merchant_1',
+                                                                       LARGER_VALUE,
+                                                                       NOW+1000)))
 
     def test_first_transaction_above_threshold(self):
         now = self.now
