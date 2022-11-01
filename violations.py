@@ -75,20 +75,28 @@ class HighFreqSmallInterval(Violation):
 
 
 class DoubledTransaction(Violation):
+    __TWO_MIN_IN_SEC = 120
+
     def __init__(self):
         super().__init__(violation_name="doubled-transaction")
 
-    # TODO: CHECK ALL WITHIN 2 MINUTES (ONLY LAST 2 MIGHT BE)
+    @classmethod
+    def __doubled__(cls, transaction_1, transaction_2) -> bool:
+        return (transaction_1.amount == transaction_2.amount and
+                transaction_1.merchant == transaction_2.merchant and
+                abs(transaction_2.time - transaction_1.time) <= cls.__TWO_MIN_IN_SEC)
 
     @classmethod
     def validate(cls, account, transaction) -> bool:
         """Validates that the violation was not infringed."""
-        TWO_MIN_IN_SEC = 120
+
         if not account.history:
             return True
 
-        prev = account.history[-1]
+        if len(account.history) == 1:
+            prev = account.history[-1]
+            return not cls.__doubled__(prev, transaction)
 
-        return not (prev.amount == transaction.amount and
-                    prev.merchant == transaction.merchant and
-                    abs(transaction.time - prev.time) < TWO_MIN_IN_SEC)
+        if len(account.history) > 1:
+            pre_prev, prev = account.history[-2:]
+            return not cls.__doubled__(prev, transaction) and not cls.__doubled__(pre_prev, transaction)

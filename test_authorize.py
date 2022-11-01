@@ -114,7 +114,7 @@ class TestAuthorize(unittest.TestCase):
         self.assertFalse(DoubledTransaction.validate(account,
                                                      Transaction('merchant_2',
                                                                  200,
-                                                                 NOW+1000)))
+                                                                 NOW)))
         self.assertTrue(DoubledTransaction.validate(account,
                                                     Transaction('merchant_1',
                                                                 150,
