@@ -71,4 +71,23 @@ class HighFreqSmallInterval(Violation):
 
         pre_prev = account.history[-2]
 
-        return pre_prev.time >= (transaction.time - TWO_MINUTES_S)
+        return pre_prev.time < (transaction.time - TWO_MINUTES_S)
+
+
+class DoubleTransaction(Violation):
+    def __init__(self):
+        super().__init__(violation_name="first-transaction-above-threshold")
+    # TODO: REFACTOR TO ACCOUNT FOR TRANSACTIONS OUT OF ORDER
+
+    @classmethod
+    def validate(cls, account, transaction) -> bool:
+        """Validates that the violation was not infringed."""
+        TWO_MIN_IN_SEC = 120
+        if not account.history:
+            return True
+
+        prev = account.history[-1]
+
+        return not (prev.amount == transaction.amount and
+                    prev.merchant == transaction.merchant and
+                    abs(transaction.time - prev.time) < TWO_MIN_IN_SEC)

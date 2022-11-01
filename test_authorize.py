@@ -65,30 +65,30 @@ class TestAuthorize(unittest.TestCase):
                                                                 LARGER_VALUE,
                                                                 now)))
 
-        def test_high_freq_small_interval(self):
-            NOW = self.now
-            TWO_MINUTES_AGO = NOW - 120
-            ONE_MINUTE_AGO = NOW - 60
+    def test_high_freq_small_interval(self):
+        NOW = self.now
+        TWO_MINUTES_AGO = NOW - 120
+        ONE_MINUTE_AGO = NOW - 60
 
-            account = Account(self.account_1.active,
-                              self.account_1.available_limit)
+        account = Account(self.account_1.active,
+                          self.account_1.available_limit)
 
-            account.history.extend([Transaction('merchant_1',
-                                                100,
-                                                TWO_MINUTES_AGO),
-                                    Transaction('merchant_2',
-                                                200,
-                                                ONE_MINUTE_AGO)])
+        account.history.extend([Transaction('merchant_1',
+                                            100,
+                                            TWO_MINUTES_AGO),
+                                Transaction('merchant_2',
+                                            200,
+                                            ONE_MINUTE_AGO)])
 
-            self.assertFalse(HighFreqSmallInterval.validate(account_sufficient,
-                                                            Transaction('merchant_3',
-                                                                        300,
-                                                                        NOW)))
+        self.assertFalse(HighFreqSmallInterval.validate(account,
+                                                        Transaction('merchant_3',
+                                                                    300,
+                                                                    NOW)))
 
-            self.assertTrue(HighFreqSmallInterval.validate(account_sufficient,
-                                                           Transaction('merchant_1',
-                                                                       LARGER_VALUE,
-                                                                       NOW+1000)))
+        self.assertTrue(HighFreqSmallInterval.validate(account,
+                                                       Transaction('merchant_1',
+                                                                   200,
+                                                                   NOW+1000)))
 
     def test_first_transaction_above_threshold(self):
         now = self.now
