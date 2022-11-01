@@ -74,10 +74,11 @@ class HighFreqSmallInterval(Violation):
         return pre_prev.time < (transaction.time - TWO_MINUTES_S)
 
 
-class DoubleTransaction(Violation):
+class DoubledTransaction(Violation):
     def __init__(self):
-        super().__init__(violation_name="first-transaction-above-threshold")
-    # TODO: REFACTOR TO ACCOUNT FOR TRANSACTIONS OUT OF ORDER
+        super().__init__(violation_name="doubled-transaction")
+
+    # TODO: CHECK ALL WITHIN 2 MINUTES (ONLY LAST 2 MIGHT BE)
 
     @classmethod
     def validate(cls, account, transaction) -> bool:

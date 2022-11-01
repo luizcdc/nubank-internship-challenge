@@ -7,7 +7,8 @@ try:
     from violations import (NotActive,
                             FirstAboveThreshold,
                             InsufficientLimit,
-                            HighFreqSmallInterval)
+                            HighFreqSmallInterval,
+                            DoubledTransaction)
 
 except ModuleNotFoundError:
     pass
@@ -86,9 +87,48 @@ class TestAuthorize(unittest.TestCase):
                                                                     NOW)))
 
         self.assertTrue(HighFreqSmallInterval.validate(account,
-                                                       Transaction('merchant_1',
+                                                       Transaction('merchant_3',
                                                                    200,
                                                                    NOW+1000)))
+
+    def test_doubled_transaction(self):
+        NOW = self.now
+        TWO_MINUTES_AGO = NOW - 120
+        ONE_MINUTE_AGO = NOW - 60
+
+        account = Account(self.account_1.active,
+                          self.account_1.available_limit)
+
+        account.history.extend([Transaction('merchant_1',
+                                            100,
+                                            TWO_MINUTES_AGO),
+                                Transaction('merchant_2',
+                                            200,
+                                            ONE_MINUTE_AGO)])
+
+        self.assertFalse(DoubledTransaction.validate(account,
+                                                     Transaction('merchant_1',
+                                                                 100,
+                                                                 NOW)))
+
+        self.assertFalse(DoubledTransaction.validate(account,
+                                                     Transaction('merchant_2',
+                                                                 200,
+                                                                 NOW+1000)))
+        self.assertTrue(DoubledTransaction.validate(account,
+                                                    Transaction('merchant_1',
+                                                                150,
+                                                                NOW)))
+
+        self.assertTrue(DoubledTransaction.validate(account,
+                                                    Transaction('merchant_5',
+                                                                100,
+                                                                NOW)))
+
+        self.assertTrue(DoubledTransaction.validate(account,
+                                                    Transaction('merchant_6',
+                                                                123,
+                                                                NOW)))
 
     def test_first_transaction_above_threshold(self):
         now = self.now
