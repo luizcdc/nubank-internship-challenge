@@ -45,12 +45,19 @@ class FirstAboveThreshold(Violation):
                  account.available_limit * FirstAboveThreshold.THRESHOLD))
 
 
-class InsufficientLimit(Violation):
+class HighFreqSmallInterval(Violation):
     def __init__(self):
         super().__init__(violation_name="first-transaction-above-threshold")
+    # TODO: REFACTOR TO ACCOUNT FOR TRANSACTIONS OUT OF ORDER
 
     @classmethod
     def validate(cls, account, transaction) -> bool:
         """Validates that the violation was not infringed."""
+        TWO_MINUTES_S = 120
 
-        return (transaction.amount <= account.available_limit)
+        if len(account.history) < 2:
+            return True
+
+        pre_prev = account.history[-2]
+
+        return pre_prev.time >= (transaction.time - TWO_MINUTES_S)
