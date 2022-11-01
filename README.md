@@ -22,16 +22,16 @@ Desafio de código para o exercício de *pair programming* do processo seletivo 
   - [x] Verificação de `account-not-active` implementada
   - [x] Verificação de `first-transaction-above-threshold` implementada
   - [x] Verificação de `insufficient-limit` implementada
-  - [ ] Verificação de `highfrequency-small-interval` implementada
-  - [ ] Verificação de `doubled-transaction` implementada
+  - [x] Verificação de `highfrequency-small-interval` implementada
+  - [x] Verificação de `doubled-transaction` implementada
 - [x] Testes
-  - [ ] Subtrai limite em caso de sucesso
-  - [ ] Adiciona transação ao histórico em caso de sucesso
+  - [x] Subtrai limite em caso de sucesso
+  - [x] Adiciona transação ao histórico em caso de sucesso
   - [x] Verificação de `account-not-active`
   - [x] Verificação de `first-transaction-above-threshold`
   - [x] Verificação de `insufficient-limit`
-  - [ ] Verificação de `highfrequency-small-interval`
-  - [ ] Verificação de `doubled-transaction`
+  - [x] Verificação de `highfrequency-small-interval`
+  - [x] Verificação de `doubled-transaction`
 
 ## Agradecimentos
 
