@@ -10,7 +10,9 @@ try:
     from violations import (Violation,
                             NotActive,
                             FirstAboveThreshold,
-                            InsufficientLimit)
+                            InsufficientLimit,
+                            HighFreqSmallInterval,
+                            DoubledTransaction)
 except ModuleNotFoundError:
     pass
 
@@ -32,7 +34,9 @@ class Account:
 
     _VALIDATIONS: tuple[Violation] = (NotActive,
                                       FirstAboveThreshold,
-                                      InsufficientLimit)
+                                      InsufficientLimit,
+                                      HighFreqSmallInterval,
+                                      DoubledTransaction)
 
     def __init__(self, active: bool = True, available_limit: int = 0) -> None:
         self.active = active
