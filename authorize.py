@@ -23,7 +23,7 @@ class Transaction:
 
     merchant: str
     amount: int  # cents
-    time: int
+    time: float
 
 
 class Account:
